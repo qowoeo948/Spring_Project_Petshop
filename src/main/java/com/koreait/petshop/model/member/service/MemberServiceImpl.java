@@ -57,8 +57,6 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int userIdCheck(String user_id) {
-		//ID 중복체크
-		memberDAO = sqlSessionTemplate.getMapper(MemberDAO.class);
 
 		return memberDAO.checkOverId(user_id);
 	}

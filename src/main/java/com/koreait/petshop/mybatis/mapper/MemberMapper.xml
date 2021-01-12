@@ -3,8 +3,8 @@
 <mapper namespace="Member">
 
 	<insert id="insert" parameterType="Member">
-		insert into member(member_id,user_id,name,phone,password,email_id,email_server,zipcode,addr) 
-		values(seq_member.nextval,#{user_id},#{name},#{phone},#{password},#{email_id},#{email_server},#{zipcode},#{addr})
+		insert into member(member_id,user_id,name,phone,password,email_id,email_server,zipcode,addr,addr_detail) 
+		values(seq_member.nextval,#{user_id},#{name},#{phone},#{password},#{email_id},#{email_server},#{zipcode},#{addr},#{addr_detail})
 	</insert>
 	
 	<select id="checkOverId" parameterType="String" resultType="int">

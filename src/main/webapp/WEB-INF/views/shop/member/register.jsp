@@ -56,81 +56,287 @@
 		}
     </style>
     <script>
-    	
-	$("#user_id").blur(function() {
+		var idFlag;
+		var passFlag;
+		var conPassFlag;
+		var emailIdFlag;
+		var emailServerFlag;
+		var nameFlag;
+		var phoneFlag;
+		var zipCodeFlag;
+		var addrFlag;
+		
+	$(function(){
+		$("#user_id").blur(function() {
+			idFlag = idCheck();
+		});
+		
+		$("#pass").blur(function() {
+			passFlag = passCheck();
+		});
+		
+		$("#con_pass").blur(function() {
+			conPassFlag = conPassCheck();
+		});
+		
+		$("#email_id").blur(function() {
+			emailIdFlag = nullCheck($("#email_id").val(), "이메일");
+		});
+		
+		$("#email_server").blur(function() {
+			emailServerFlag = nullCheck($("#email_server").val(), "이메일");
+		});
+		
+		$("#name").blur(function() {
+			nameFlag = nullCheck($("#name").val(), "이름");
+		});
+		
+		$("#phone").blur(function() {
+			phoneFlag = nullCheck($("#phone").val(), "연락처");
+		});
+		
+		$("#sample6_postcode").blur(function() {
+			zipCodeFlag = nullCheck($("#sample6_postcode").val(), "우편번호");
+		});
+		
+		$("#sample6_address").blur(function() {
+			addrFlag = nullCheck($("#sample6_address").val(), "주소");
+		});
+			
+		//회원가입 처리
+		$("#register_btn").click(function(){
+			if(registCheck()){
+				regist();
+			}
+		});
+		
+		//주소찾기 api 호출
+		$("#addr_serch").click(function(){
+			serchAddr();
+		});
+		
+	});
+	
+	function registCheck(){
+		if($("input[type='text']").val()==""){
+			alert("양식을 확인해 주세요.");
+		}else{
+			return true;
+		}
+	}
+	
+	//ID 중복 체크	
+	function idCheck(){
 		// id = "id_reg" / name = "userId"
-		var user_id = $('#user_id').val();
+		var user_id = $("#user_id").val();
+		console.log(user_id);
 		$.ajax({
-			url : '${pageContext.request.contextPath}/user/idCheck?userId='+ user_id,
-			type : 'get',
-			success : function(data) {
-				console.log("1 = 중복o / 0 = 중복x : "+ data);							
+			url : "/user/idCheck?user_id="+user_id,
+			type : "get",
+			success : function(responseData) {
+				console.log("1 = 중복o / 0 = 중복x : "+ responseData);							
 				
-				if (data == 1) {
+				if (responseData >= 1) {
 						// 1 : 아이디가 중복되는 문구
 						$("#id_check").text("사용중인 아이디입니다 :p");
 						$("#id_check").css("color", "red");
-						$("#reg_submit").attr("disabled", true);
-					} else {
 						
-						if(idJ.test(user_id)){
-							// 0 : 아이디 길이 / 문자열 검사
-							$("#id_check").text("사용 가능한 아이디입니다 :p");
-							$("#id_check").css("color", "green");
-							$("#reg_submit").attr("disabled", true);
-				
-						} else if(user_id == ""){
-							
-							$('#id_check').text('아이디를 입력해주세요 :)');
+						return false;
+						
+				} else {
+						
+					if(user_id == ""){
+						$('#id_check').text('아이디를 입력해주세요 :)');
+						$('#id_check').css('color', 'red');
+						
+						return false;				
+						
+					} else if(user_id != null){
+						if(user_id.length < 4 || user_id.length > 12){
+							$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :)");
 							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);				
 							
-						} else {
+							return false;
 							
-							$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
-							$('#id_check').css('color', 'red');
-							$("#reg_submit").attr("disabled", true);
+						} else{
+							$('#id_check').text("사용 가능한 아이디 입니다! ;)");
+							$('#id_check').css('color', 'green');
+							
+							return true;
 						}
-						
 					}
-				}, error : function() {
-						console.log("실패");
+					
 				}
-			});
+			}, 
+			error : function() {
+					console.log("실패");
+			}
 		});
-		$(function(){
-			//회원가입 처리
-			$("input[type='button']").click(function(){
-				regist();
-			});
-		});
-		//요청이 완료되는 시점에 프로그래스바를 감춘다!!
-		function regist(){
-			//로딩바 시작
-			$("#loader").addClass("loader"); //class 동적 적용
-			document.getElementById("overlay").style.display = "block";
+	}
+	
+	//비밀번호 유효성 체크
+	function passCheck(){
+		var pass = $("#pass").val();
+		var id = $("#id").val();
+		var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+		var hangulcheck = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+		
+		if(false === reg.test(pass)) {
+			$('#pass_check').text('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다 :)');
+			$('#pass_check').css('color', 'red');
 			
-			//data의 키 값으로 form태그의 파라미터들을 전송할 수 있는 상태로 둬야 data 키 값에 form 자체를 넣을 수 있다.
-			var formData = $("#member_form").serialize(); //전부 문자열화 시킨다!!
+		 	return false;
+		 	
+		}else if(/(\w)\1\1\1/.test(pass)){
+			$('#pass_check').text('같은 문자를 4번 이상 사용하실 수 없습니다 :)');
+			$('#pass_check').css('color', 'red');
 			
-			$.ajax({
-				url:"/shop/member/regist",
-				type:"post",
-				data:formData,
-				success:function(responseData){
-					//서버로부터 완료 응답을 받으면 로딩바 효과를 중단!!
-					$("#loader").removeClass("loader"); //class 동적 제거
-					document.getElementById("overlay").style.display = "none";
-					var json = JSON.parse(responseData);
-					if(json.result == 1){
-						alert(json.msg);
-						location.href="/petshop"; //추후 로그인 페이지로 보낼예정
-					}else{
-						alert(json.msg);
-					}
+		 	return false;
+		 	
+		 }else if(pass.search(/\s/) != -1){
+			$('#pass_check').text('비밀번호는 공백 없이 입력해주세요 :)');
+			$('#pass_check').css('color', 'red');
+			
+		 	return false;
+		 	
+		 }else if(hangulcheck.test(pass)){
+			$('#pass_check').text('비밀번호에 한글을 사용 할 수 없습니다 :)');
+			$('#pass_check').css('color', 'red');
+			
+		 	return false;
+		 	
+		 }else {
+			$('#pass_check').text("사용 가능한 비밀번호 입니다! ;)");
+			$('#pass_check').css('color', 'green');
+			
+		 	return true;
+		 }
+	}
+	
+	//비밀번호 동일성 체크
+	function conPassCheck(){
+		var pass = $("#pass").val();
+		var con_pass = $("#con_pass").val();
+		console.log(passFlag);
+		if(passFlag){
+			if(con_pass == ""){
+				$('#con_pass_check').text('비밀번호 확인을 진행해주세요 :)');
+				$('#con_pass_check').css('color', 'red');
+				
+				return false;			
+				
+			} else if(con_pass != null){
+				if(pass != con_pass){
+					$('#con_pass_check').text("비밀번호가 일치하지 않습니다 :)");
+					$('#con_pass_check').css('color', 'red');
+					
+					return false;
+					
+				} else{
+					$('#con_pass_check').text("비밀번호가 일치합니다! ;)");
+					$('#con_pass_check').css('color', 'green');
+					
+					return true;
 				}
-			});
+			}
 		}
+	}
+	
+	//양식 null 체크
+	function nullCheck(val, msg){
+		console.log(val);
+		console.log(msg);
+		if(val == ""){
+			$('#null_check').text(msg+"을(를) 확인해 주세요 :)");
+			$('#null_check').css('color', 'red');
+			
+			return false;
+			
+		}else{
+			$('#null_check').text("");
+			$('#null_check').css('color', 'green');
+			
+			return true;
+		}
+	}
+	
+	//요청이 완료되는 시점에 프로그래스바를 감춘다!!
+	function regist(){
+		//로딩바 시작
+		$("#loader").addClass("loader"); //class 동적 적용
+		document.getElementById("overlay").style.display = "block";
+		
+		//data의 키 값으로 form태그의 파라미터들을 전송할 수 있는 상태로 둬야 data 키 값에 form 자체를 넣을 수 있다.
+		var formData = $("#member_form").serialize(); //전부 문자열화 시킨다!!
+		
+		$.ajax({
+			url:"/shop/member/regist",
+			type:"post",
+			data:formData,
+			success:function(responseData){
+				//서버로부터 완료 응답을 받으면 로딩바 효과를 중단!!
+				$("#loader").removeClass("loader"); //class 동적 제거
+				document.getElementById("overlay").style.display = "none";
+				var json = JSON.parse(responseData);
+				if(json.result == 1){
+					alert(json.msg);
+					location.href="/petshop"; //추후 로그인 페이지로 보낼예정
+				}else{
+					alert(json.msg);
+				}
+			}
+		});
+	}
+</script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("sample6_extraAddress").value = extraAddr;
+                
+                } else {
+                    document.getElementById("sample6_extraAddress").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.getElementById("sample6_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample6_detailAddress").focus();
+            }
+        }).open();
+    }
 </script>
 </head>
 
@@ -172,48 +378,50 @@
                         <form id="member_form">
                             <div class="group-input">
                                 <label for="user_id">User ID *</label>
-                                <input type="text" id="user_id" name="user_id">
-	                            <!-- <button type="button" id="reg_submit" class="site-btn register-btn">중복체크</button> -->
+                                <input type="text" id="user_id" name="user_id" placeholder="아이디는 소문자와 숫자 4~12자리만 가능합니다">
                                 <div id="id_check"></div>
                             </div>
                             <div class="group-input">
                                 <label for="pass">Password *</label>
-                                <input type="password" id="pass" name="password">
+                                <input type="password" id="pass" name="password" placeholder="비밀번호는 소문자와 숫자 최소 12자리 이상 가능합니다">
+                                <div id="pass_check"></div>
                             </div>
                             <div class="group-input">
-                                <label for="con-pass">Confirm Password *</label>
-                                <input type="password" id="con-pass">
+                                <label for="con_pass">Confirm Password *</label>
+                                <input type="password" id="con_pass" placeholder="위와 동일한 비밀번호를 입력해주세요">
+                                <div id="con_pass_check"></div>
                             </div>
                             <div class="group-input">
-                                <label for="name">Name *</label>
-                                <input type="text" id="name" name="name">
-                            </div>
-                            <div class="group-input">
-                                <label for="phone">Phone *</label>
-                                <input type="text" id="phone" name="phone">
-                            </div>
-                            <div class="group-input">
-                                <label for="email_id">Email ID *</label>
-                                <input type="text" id="email_id" name="email_id">
-                                <label for="email_server">Email Server *</label>
-	                            <select id="email_server" name="email_server" style="width:100%; height: 50px; border:1px solid; border-color:lightgray;">
+                                <label for="email_id">Email *</label>
+                                <input type="text" id="email_id" name="email_id" style="width:47%;" placeholder="이메일 아이디 입력"> @
+	                            <select id="email_server" name="email_server" style="width:47%; height: 50px; border:1px solid; border-color:lightgray;">
+									<option value="gmail.com">선택하세요</option>
 									<option value="gmail.com">gmail.com</option>
 									<option value="daum.net">daum.net</option>
 									<option value="naver.com">naver.com</option>
 								</select>
                             </div>
                             <div class="group-input">
-                                <label for="zipCode">ZipCode *</label>
-                                <input type="text" id="zipCode" name="zipcode">
+                                <label for="name">Name *</label>
+                                <input type="text" id="name" name="name" placeholder="성함">
                             </div>
                             <div class="group-input">
-                                <label for="addr">Address *</label>
-                                <input type="text" id="addr" name="addr">
+                                <label for="phone">Phone *</label>
+                                <input type="text" id="phone" name="phone" placeholder="연락처">
                             </div>
-                            <input type="button" class="site-btn register-btn" value="REGISTER">
+                            <div class="group-input">
+                                <label for="sample6_postcode">Address *</label>
+								<input type="text" id="sample6_postcode" name="zipcode" placeholder="우편번호" style="width:49%;">
+								<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="site-btn" style="width:49%"><br>
+								<input type="text" id="sample6_address" name="addr" placeholder="주소"><br>
+								<input type="text" id="sample6_detailAddress" name="addr_detail" placeholder="상세주소">
+								<input type="hidden" id="sample6_extraAddress" placeholder="참고항목">
+                            </div>
+                            <div id="null_check"></div>
+                            <input type="button" id="register_btn" class="site-btn register-btn" value="REGISTER">
                         </form>
                         <div class="switch-login">
-                            <a href="./login.html" class="or-login">Or Login</a>
+                            <a href="/petshop/login" class="or-login">Or Login</a>
                         </div>
                     </div>
                 </div>

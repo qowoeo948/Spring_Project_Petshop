@@ -40,9 +40,8 @@ public class MybatisMemberDAO implements MemberDAO{
 
 	@Override
 	public int checkOverId(String user_id) {
-		int result = sqlSessionTemplate.selectOne("Member.checkOverId", user_id);
 		
-		return result;
+		return sqlSessionTemplate.selectOne("Member.checkOverId", user_id);
 	}
 
 }

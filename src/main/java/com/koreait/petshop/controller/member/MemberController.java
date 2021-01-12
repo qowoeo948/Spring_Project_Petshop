@@ -29,9 +29,11 @@ public class MemberController {
 		return mav;
 	}
 	
+	//아이디 중복 체크
 	@RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
 	@ResponseBody
-	public int idCheck(@RequestParam("userId") String user_id) {
+	public int idCheck(@RequestParam(value="user_id") String user_id) {
+		//logger.debug(user_id);
 
 		return memberService.userIdCheck(user_id);
 	}
@@ -48,6 +50,7 @@ public class MemberController {
 		logger.debug("이메일server "+member.getEmail_server());
 		logger.debug("우편번호 "+member.getZipcode());
 		logger.debug("주소 "+member.getAddr());
+		logger.debug("주소 "+member.getAddr_detail());
 		
 		memberService.regist(member);
 		
@@ -59,4 +62,13 @@ public class MemberController {
 		
 		return sb.toString();
 	} 
+	
+	//회원가입 폼 요청
+	@RequestMapping(value="/petshop/login")
+	public ModelAndView getLogin() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("shop/member/login");
+		
+		return mav;
+	}
 }

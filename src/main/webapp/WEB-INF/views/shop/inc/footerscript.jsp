@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8"%>
-    <script src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/resources/js/bootstrap.min.js"></script>
     <script src="/resources/js/jquery-ui.min.js"></script>
     <script src="/resources/js/jquery.countdown.min.js"></script>

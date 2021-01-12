@@ -13,5 +13,6 @@ public class Member {
 	private String email_server;
 	private String zipcode;
 	private String addr;
+	private String addr_detail;
 	private String regdate;
 }
