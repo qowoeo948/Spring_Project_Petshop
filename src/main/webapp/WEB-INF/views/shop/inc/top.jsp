@@ -20,8 +20,6 @@
                     </div>
                 </div>
                 <div class="ht-right">
-                    <a href="#" class="login-panel"><i class="fa fa-user"></i>Login</a>
-
                     <div class="top-social">
                         <a href="#"><i class="ti-facebook"></i></a>
                         <a href="#"><i class="ti-twitter-alt"></i></a>
@@ -122,7 +120,7 @@
                 </div>
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html">Home</a></li>
+                        <li><a href="/">Home</a></li>
                         <li><a href="./shop.html">Shop</a></li>
                         <li><a href="#">Collection</a>
                             <ul class="dropdown">
@@ -131,16 +129,17 @@
                                 <li><a href="#">Kid's</a></li>
                             </ul>
                         </li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
+                        <li><a href="/shop/contact">Contact</a></li>
+                        <li><a href="/shop/qna/list">QNA</a></li>
                         <li><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="./blog-details.html">Blog Details</a></li>
-                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./check-out.html">Checkout</a></li>
-                                <li><a href="./faq.html">Faq</a></li>
+                           <ul class="dropdown">
                                 <li><a href="/petshop/register">Register</a></li>
-                                <li><a href="/petshop/login">Login</a></li>
+                                <%if(session.getAttribute("member")==null){ //세션에 담겨진 데이터가 없다면%>
+                                   <li><a href="/petshop/login">Login</a></li>
+                                <%}else{ %>
+                                   <li><a href="/petshop/logoutRequest">LogOut</a></li>
+                                   <li><a href="/petshop/logoutRequest">Cart</a></li>
+                                <%} %>
                             </ul>
                         </li>
                     </ul>

@@ -11,12 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
-@Component  /*component-scanì˜ ëŒ€ìƒ ì¤‘ í•˜ë‚˜ì„..*/
+@Component		//component-scanÀÇ ´ë»ó Áß ÇÏ³ªÀÓ..
 public class FileManager {
 	private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
+	
 	private String saveBasicDir="/resources/data/basic";
 	private String saveAddonDir="/resources/data/addon";
-		
+
 	public static String getExtend(String path) {
 		int lastIndex = path.lastIndexOf(".");
 		String ext = path.substring(lastIndex+1, path.length());
@@ -29,8 +30,8 @@ public class FileManager {
 		return file.delete();
 	}
 	
-	//íŒŒì¼ ì €ì¥í•˜ê¸°
-	public void saveFile(String realDir , MultipartFile multi) {
+	//ÆÄÀÏ ÀúÀåÇÏ±â
+	public void saveFile(String realDir,MultipartFile multi) {
 		try {
 			multi.transferTo(new File(realDir));
 		} catch (IllegalStateException e) {
@@ -38,6 +39,7 @@ public class FileManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 }

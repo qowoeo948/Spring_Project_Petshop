@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MessageData {
-	private int resultCode; //ì‹¤íŒ¨, ì„±ê³µ ì—¬ë¶€ íŒë‹¨ ì½”ë“œ
-	private String msg; //í´ë¼ì´ì–¸íŠ¸ê°€ ë³´ê²Œë  ë©”ì„¸ì§€
-	private String url; //ìƒˆë¡­ê²Œ ìš”ì²­í•  í˜ì´ì§€ê°€ ìˆë‹¤ë©´ ê·¸ url
+   private int resultCode; //½ÇÆĞ, ¼º°ø ¿©ºÎ ÆÇ´Ü ÄÚµå
+   private String msg; //Å¬¶óÀÌ¾ğÆ®°¡ º¸°ÔµÉ ¸Ş¼¼Áö
+   private String url; //»õ·Ó°Ô ¿äÃ»ÇÒ ÆäÀÌÁö°¡ ÀÖ´Ù¸é ±× url
 }

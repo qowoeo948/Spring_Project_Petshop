@@ -7,41 +7,41 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.stereotype.Component;
 
 /*
- *ì¼ë‹¨ ì•”í˜¸í™” ëœ ì´í›„ì—”, ë³µí˜¸í™” ì‹œí‚¬ ìˆ˜ ì—†ëŠ” SHA256 ì•Œê³ ë¦¬ì¦˜ìœ¼ë¡œ íšŒì›ì˜ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì•”í˜¸í™”ì‹œì¼œì£¼ëŠ” ê°ì²´ 
+ *ÀÏ´Ü ¾ÏÈ£È­ µÈ ÀÌÈÄ¿£, º¹È£È­ ½ÃÅ³ ¼ö ¾ø´Â SHA256 ¾Ë°í¸®ÁòÀ¸·Î È¸¿øÀÇ ºñ¹Ğ¹øÈ£¸¦ ¾ÏÈ£È­½ÃÄÑÁÖ´Â °´Ã¼ 
  * */
 @Component
 public class SecureManager {
-	public String getSecureData(String password) {	
-		StringBuffer sb = new StringBuffer();//ë¬¸ìì—´ì„ ëˆ„ì ì‹œí‚¬ ê°ì²´
-		
-		try {
-			MessageDigest digest=MessageDigest.getInstance("SHA-256") ;
-			byte[] data = password.getBytes("UTF-8");//ì¼ë‹¨ ë°”ì´íŠ¸ ë°°ì—´ë¡œ ìª¼ê°œê¸°!!
-			byte[] hash = digest.digest(data);
-			
-			//ìª¼ê°œì§„ ë°ì´í„°ë¥¼ ëŒ€ìƒìœ¼ë¡œ 16ì§„ìˆ˜ê°’ìœ¼ë¡œ ë³€í™˜í•˜ì—¬ ë¬¸ìì—´ë¡œ ë³€í™˜
-			
-			for(int i=0;i<hash.length;i++) {
-				String hex=Integer.toHexString(0xff&hash[i]); //ì •ìˆ˜ë¥¼ 16ì§„ìˆ˜ ë¬¸ìì—´ë¡œ ë³€í™˜
-				//System.out.println(hex); //ì¤‘ê°„ ì ê²€
-				if(hex.length()==1) {
-					sb.append("0");	
-				}
-				sb.append(hex);
-			}
-			
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return sb.toString();
-	}
-//	
-//	public static void main(String[] args) {
-//		String result = new SecureManager().getSecureData("bananaking");
-//		System.out.println(result);
-//	}
-	
+   public String getSecureData(String password) {   
+      StringBuffer sb = new StringBuffer();//¹®ÀÚ¿­À» ´©Àû½ÃÅ³ °´Ã¼
+      
+      try {
+         MessageDigest digest=MessageDigest.getInstance("SHA-256") ;
+         byte[] data = password.getBytes("UTF-8");//ÀÏ´Ü ¹ÙÀÌÆ® ¹è¿­·Î ÂÉ°³±â!!
+         byte[] hash = digest.digest(data);
+         
+         //ÂÉ°³Áø µ¥ÀÌÅÍ¸¦ ´ë»óÀ¸·Î 16Áø¼ö°ªÀ¸·Î º¯È¯ÇÏ¿© ¹®ÀÚ¿­·Î º¯È¯
+         
+         for(int i=0;i<hash.length;i++) {
+            String hex=Integer.toHexString(0xff&hash[i]); //Á¤¼ö¸¦ 16Áø¼ö ¹®ÀÚ¿­·Î º¯È¯
+            //System.out.println(hex); //Áß°£ Á¡°Ë
+            if(hex.length()==1) {
+               sb.append("0");   
+            }
+            sb.append(hex);
+         }
+         
+      } catch (NoSuchAlgorithmException e) {
+         e.printStackTrace();
+      } catch (UnsupportedEncodingException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      return sb.toString();
+   }
+//   
+//   public static void main(String[] args) {
+//      String result = new SecureManager().getSecureData("bananaking");
+//      System.out.println(result);
+//   }
+   
 }

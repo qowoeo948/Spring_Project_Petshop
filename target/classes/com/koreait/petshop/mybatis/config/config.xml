@@ -4,11 +4,38 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.koreait.petshop.model.domain.Member" 		alias="Member"/>		
+		<!-- 상품관련 -->
+		<typeAlias type="com.koreait.petshop.model.domain.TopCategory" alias="TopCategory"/>
+		<typeAlias type="com.koreait.petshop.model.domain.SubCategory" alias="SubCategory"/>
+		<typeAlias type="com.koreait.petshop.model.domain.Product" alias="Product"/>
+		<typeAlias type="com.koreait.petshop.model.domain.Image" alias="Image"/>
+		
+		<!-- 회원관련 -->
+		<typeAlias type="com.koreait.petshop.model.domain.MemberType" alias="MemberType"/>     
+		<typeAlias type="com.koreait.petshop.model.domain.Member" alias="Member"/>     
+		<typeAlias type="com.koreait.petshop.model.domain.Admin" alias="Admin"/>     
+		
+		<!-- 게시판 관련 -->
+		<typeAlias type="com.koreait.petshop.model.domain.Board" alias="Board"/>
+		<typeAlias type="com.koreait.petshop.model.domain.Comment" alias="Comment"/>
+
+		
 	</typeAliases>
+  <mappers>
+  	<!-- 상품관련 -->
+    <mapper resource="com/koreait/petshop/mybatis/mapper/TopCategoryMapper.xml"/>
+    <mapper resource="com/koreait/petshop/mybatis/mapper/SubCategoryMapper.xml"/>
+    <mapper resource="com/koreait/petshop/mybatis/mapper/ProductMapper.xml"/>
+    <mapper resource="com/koreait/petshop/mybatis/mapper/ImageMapper.xml"/>
 	
-	<mappers>
-		<mapper resource="com/koreait/petshop/mybatis/mapper/MemberMapper.xml"/>
-	</mappers>
+	<!-- 회원관련 -->
+	<mapper resource="com/koreait/petshop/mybatis/mapper/MemberTypeMapper.xml"/>
+	<mapper resource="com/koreait/petshop/mybatis/mapper/MemberMapper.xml"/>
+	<mapper resource="com/koreait/petshop/mybatis/mapper/AdminMapper.xml"/>
 	
+	<!-- 게시판 관련 -->
+    <mapper resource="com/koreait/petshop/mybatis/mapper/BoardMapper.xml"/>
+    <mapper resource="com/koreait/petshop/mybatis/mapper/CommentMapper.xml"/>
+    
+  </mappers>
 </configuration>

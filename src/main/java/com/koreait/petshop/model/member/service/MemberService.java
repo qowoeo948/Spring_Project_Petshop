@@ -5,10 +5,10 @@ import java.util.List;
 import com.koreait.petshop.model.domain.Member;
 
 public interface MemberService {
-	public List selectAll();//ëª¨ë“  íšŒì›ê°€ì ¸ì˜¤ê¸°
-	public Member select(Member member); //íšŒì›1ëª… ê°€ì ¸ì˜¤ê¸°
-	public void regist(Member member);//íšŒì›ë“±ë¡ ë° ê¸°íƒ€í•„ìš”ì‚¬í•­ ì²˜ë¦¬..
-	public int userIdCheck(String user_id); //ì•„ì´ë”” ì¤‘ë³µ ì²´í¬
-	public void update(Member member); //íšŒì›ì •ë³´ ìˆ˜ì •
-	public void delete(Member member); //íšŒì›ì •ë³´ ì‚­ì œ
+   public List selectAll();//¸ğµç È¸¿ø°¡Á®¿À±â
+   public Member select(Member member); //È¸¿ø1¸í °¡Á®¿À±â
+   public void regist(Member member);//È¸¿øµî·Ï ¹× ±âÅ¸ÇÊ¿ä»çÇ× Ã³¸®..
+   public int userIdCheck(String user_id); //¾ÆÀÌµğ Áßº¹ Ã¼Å©
+   public void update(Member member); //È¸¿øÁ¤º¸ ¼öÁ¤
+   public void delete(Member member); //È¸¿øÁ¤º¸ »èÁ¦
 }

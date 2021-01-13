@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.koreait.petshop.exception.MailSendException;
+import com.koreait.petshop.exception.MemberNotFoundException;
+import com.koreait.petshop.exception.MemberRegistException;
 import com.koreait.petshop.model.common.MailSender;
 import com.koreait.petshop.model.common.SecureManager;
 import com.koreait.petshop.model.domain.Member;
@@ -14,61 +16,70 @@ import com.koreait.petshop.model.member.repository.MemberDAO;
 
 @Service
 public class MemberServiceImpl implements MemberService{
-	@Autowired
-	private SqlSessionTemplate sqlSessionTemplate;
-	
-	@Autowired
-	private MemberDAO memberDAO;
-	
-	//ë©”ì¼ë°œì†¡ ê°ì²´
-	@Autowired
-	private MailSender mailSender;
-	
-	//ì•”í˜¸í™” ê°ì²´ 
-	@Autowired
-	private SecureManager secureManager;
+   @Autowired
+   private SqlSessionTemplate sqlSessionTemplate;
+   
+   @Autowired
+   private MemberDAO memberDAO;
+   
+   //¸ŞÀÏ¹ß¼Û °´Ã¼
+   @Autowired
+   private MailSender mailSender;
+   
+   //¾ÏÈ£È­ °´Ã¼ 
+   @Autowired
+   private SecureManager secureManager;
 
-	@Override
-	public List selectAll() {
-		return null;
-	}
+   @Override
+   public List selectAll() {
+      return null;
+   }
 
-	@Override
-	public Member select(Member member) {
-		return null;
-	}
+   //·Î±×ÀÎ
+   @Override
+   public Member select(Member member) throws MemberNotFoundException{
+      //À¯Àú°¡ Àü¼ÛÇÑ ÆÄ¶ó¹ÌÅÍ ºñ¹Ğ¹øÈ£¸¦ ÇØ½Ã°ªÀ¸·Î º¯È¯ÇÏ¿© ¾Æ·¡ÀÇ ¸Ş¼­µå È£Ãâ
+      String hash = secureManager.getSecureData(member.getPassword());
+      member.setPassword(hash); //VO¿¡ ÇØ½¬°ª ´ëÀÔ
+      
+      Member obj = memberDAO.select(member);
+      
+      return obj;
+   }
 
-	@Override
-	public void regist(Member member) throws MailSendException{
-		//ì•”í˜¸í™” ì²˜ë¦¬ 
-		String secureData = secureManager.getSecureData(member.getPassword());
-		member.setPassword(secureData); //ë³€í™˜ì‹œì¼œ ë‹¤ì‹œ VOì— ëŒ€ì…
-		
-		//DBì— ë„£ê¸°
-		memberDAO.insert(member);
-		
-		//ë©”ì¼ë°œì†¡
-		String name=member.getName();
-		String addr=member.getAddr();
-		String email = member.getEmail_id()+"@"+member.getEmail_server();
-		
-		mailSender.send(email , name+"ë‹˜ [íŒ»í† í”¼ì•„]ê°€ì…ì¶•í•˜ë“œë ¤ìš”", addr+"ì— ê±°ì£¼í•˜ì„¸ìš”? ê°ì‚¬í•©ë‹ˆë‹¹");
-	}
+   //È¸¿ø°¡ÀÔ
+   @Override
+   public void regist(Member member) throws MemberRegistException, MailSendException{
+      //¾ÏÈ£È­ Ã³¸® 
+      String secureData = secureManager.getSecureData(member.getPassword());
+      member.setPassword(secureData); //º¯È¯½ÃÄÑ ´Ù½Ã VO¿¡ ´ëÀÔ
+      
+      //DB¿¡ ³Ö±â
+      memberDAO.insert(member);
+      
+      //¸ŞÀÏ¹ß¼Û
+      String name=member.getName();
+      String addr=member.getAddr();
+      String email = member.getEmail_id()+"@"+member.getEmail_server();
+      
+      mailSender.send(email , name+"´Ô [ÆÖÅäÇÇ¾Æ]°¡ÀÔÃàÇÏµå·Á¿ä", addr+"¿¡ °ÅÁÖÇÏ¼¼¿ä? °¨»çÇÕ´Ï´ç");
+   }
 
-	@Override
-	public int userIdCheck(String user_id) {
+   //ID Áßº¹Ã¼Å©
+   @Override
+   public int userIdCheck(String user_id) {
 
-		return memberDAO.checkOverId(user_id);
-	}
-	
-	@Override
-	public void update(Member member) {
-		
-	}
+      return memberDAO.checkOverId(user_id);
+   }
+   
+   @Override
+   public void update(Member member) {
+      
+   }
 
-	@Override
-	public void delete(Member member) {
-		
-	}
+   @Override
+   public void delete(Member member) {
+      
+   }
 
 }

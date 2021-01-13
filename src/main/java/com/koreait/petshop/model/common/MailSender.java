@@ -1,6 +1,5 @@
 package com.koreait.petshop.model.common;
 import java.util.Properties;
-
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,12 +13,13 @@ import org.springframework.stereotype.Component;
 
 import com.koreait.petshop.exception.MailSendException;
 
+
 @Component
 public class MailSender {
 	String host = "smtp.gmail.com";
-	String user = "dyd414646@gmail.com";
-	String password = "rrcwxvgiavlkybem"; //í¬ë¡¬ë¸Œë¼ìš°ì € ë³´ì•ˆì—ì„œ ì¸ì¦ë°›ì€ ë¹„ë²ˆë„£ê¸°
-	Properties props = new Properties();
+	String user = "qowoeo948@gmail.com";
+	String password = "pyxqmwzagpwfhzyx"; //Å©·Òºê¶ó¿ìÀú º¸¾È¿¡¼­ ÀÎÁõ¹ŞÀº ºñ¹ø³Ö±â
+	Properties props = new Properties(); 
 	
 	public void send(String to, String title, String content) throws MailSendException{
 		props.put("mail.smtp.host", host);
@@ -38,15 +38,15 @@ public class MailSender {
 			
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(user));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			message.setSubject(title);//ë©”ì¼ì œëª©
-			message.setContent(content, "text/html;charset=utf-8");
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));	//to: ¹Ş´Â»ç¶÷
+			message.setSubject(title);		//¸ŞÀÏÁ¦¸ñ
+			message.setContent(content, "text/html;charset=utf-8");		//³»¿ë
 			
 			Transport.send(message);
 			System.out.println("Success Message Send");
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			throw new MailSendException("íšŒì›ê°€ì… ë©”ì¼ ë°œì†¡ì‹¤íŒ¨");
+			throw new MailSendException("È¸¿ø°¡ÀÔ ¸ŞÀÏ ¹ß¼Û½ÇÆĞ");
 		}
 	}
 }

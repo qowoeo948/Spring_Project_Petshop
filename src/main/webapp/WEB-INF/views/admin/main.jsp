@@ -12,8 +12,7 @@
 	웹사이트 루트를 기준으로 한 경로는 막혀있다. 따라서 상대경로로 가자. main.jsp를 기준으로 같은 경로에 있는 ./inc/main_navi.jsp-->
 <%@ include file="./inc/main_navi.jsp" %>
 
-<h3>Dropdown Menu inside a Navigation Bar</h3>
-<p>Hover over the "Dropdown" link to see the dropdown menu.</p>
+<h3>관리자 페이지</h3>
 
 </body>
 </html>

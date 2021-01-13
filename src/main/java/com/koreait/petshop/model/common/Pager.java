@@ -1,5 +1,5 @@
 /*
- * paging Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ë¼ºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+ * paging Ã³¸®¸¦ Àç»ç¿ë¼ºÀ» ³ôÀÎ Å¬·¡½º·Î Á¤ÀÇ
  * 
  * */
 package com.koreait.petshop.model.common;
@@ -8,11 +8,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Pager {
-	private int totalRecord;	//ï¿½ï¿½ ï¿½ï¿½ï¿½Úµï¿½ ï¿½ï¿½ 
-	private int pageSize=10;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Úµï¿½ ï¿½ï¿½ 
+	private List list;
+	private int totalRecord;	//ÃÑ ·¹ÄÚµå ¼ö 
+	private int pageSize=4;	// ÆäÀÌÁö´ç º¸¿©Áú ·¹ÄÚµå ¼ö 
 	private int totalPage;
-	private int blockSize=10; //ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+	private int blockSize=10; //ºí·° ´ç º¸¿©Áú ÆäÀÌÁö ¼ö
 	private int currentPage=1;
 	private int firstPage;
 	private int lastPage;
@@ -20,13 +24,15 @@ public class Pager {
 	int curPos;
 	int num;
 	
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
-	//ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¼±¾ðµÈ º¯¼ö ÃÊ±âÈ­
+	//½Ç½Ã°£À¸·Î º¯ÇÏ´Â °ªµéÀº »ý¼ºÀÚ¿¡¼­ ¹Ù²î°Ô ¸¸µé¾îÁà¾ßÇÔ
 	public void init(HttpServletRequest request, List list) {
+		this.list = list;	//º¸°ü
+		
 		totalRecord = list.size();
 		totalPage=(int)Math.ceil((float)totalRecord/pageSize);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿£, ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
+		//ÆäÀÌÁö¸¦ ¼±ÅÃÇÑ °æ¿ì¿£, ±× ¼±ÅÃµÈ ÆäÀÌÁö·Î ´ëÃ¼
 		if(request.getParameter("currentPage")!=null) {
 			currentPage=Integer.parseInt(request.getParameter("currentPage"));
 		}
@@ -34,9 +40,13 @@ public class Pager {
 		firstPage=currentPage-(currentPage-1)%blockSize;
 		lastPage=firstPage+(blockSize-1);
 
-		curPos=(currentPage-1)*pageSize;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ index
-		num=totalRecord-curPos;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
+		curPos=(currentPage-1)*pageSize;	//ÆäÀÌÁö ´ç List³»¿¡¼­ÀÇ ½ÃÀÛ index
+		num=totalRecord-curPos;	//ÆäÀÌÁö´ç ½ÃÀÛ ¹øÈ£
 		
+	}
+	
+	public List getList() {
+		return list;
 	}
 
 	public int getTotalRecord() {

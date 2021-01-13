@@ -1,74 +1,189 @@
 package com.koreait.petshop.controller.member;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.koreait.petshop.exception.MailSendException;
+import com.koreait.petshop.exception.MemberNotFoundException;
+import com.koreait.petshop.exception.MemberRegistException;
+import com.koreait.petshop.model.common.MessageData;
+import com.koreait.petshop.model.domain.Admin;
 import com.koreait.petshop.model.domain.Member;
+import com.koreait.petshop.model.domain.MemberType;
+import com.koreait.petshop.model.member.service.AdminService;
 import com.koreait.petshop.model.member.service.MemberService;
+import com.koreait.petshop.model.member.service.MemberTypeService;
 
 @Controller
 public class MemberController {
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
-	@Autowired
-	private MemberService memberService;
-	
-	//íšŒì›ê°€ì… í¼ ìš”ì²­
-	@RequestMapping(value="/petshop/register")
-	public ModelAndView getRegister() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("shop/member/register");
-		
-		return mav;
-	}
-	
-	//ì•„ì´ë”” ì¤‘ë³µ ì²´í¬
-	@RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
-	@ResponseBody
-	public int idCheck(@RequestParam(value="user_id") String user_id) {
-		//logger.debug(user_id);
+   private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+   
+   @Autowired
+   private MemberTypeService memberTypeService;
+   
+   @Autowired
+   private MemberService memberService;
+   
+   @Autowired
+   private AdminService adminService;
+   
+   //È¸¿ø°¡ÀÔ Æû ¿äÃ»
+   @RequestMapping(value="/petshop/register")
+   public ModelAndView getRegister(HttpServletRequest request) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("shop/member/register");
+      
+      return mav;
+   }
+   
+   //¾ÆÀÌµğ Áßº¹ Ã¼Å©
+   @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
+   @ResponseBody
+   public int idCheck(@RequestParam(value="user_id") String user_id, HttpServletRequest request) {
+      //logger.debug(user_id);
 
-		return memberService.userIdCheck(user_id);
-	}
-	
-	//íšŒì›ê°€ì… ìš”ì²­ ì²˜ë¦¬ 
-	@RequestMapping(value="/shop/member/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
-	@ResponseBody
-	public String regist(Member member) {
-		logger.debug("ì•„ì´ë”” "+member.getUser_id());
-		logger.debug("ì´ë¦„ "+member.getName());
-		logger.debug("ì´ë¦„ "+member.getPhone());
-		logger.debug("ë¹„ë²ˆ "+member.getPassword());
-		logger.debug("ì´ë©”ì¼id "+member.getEmail_id());
-		logger.debug("ì´ë©”ì¼server "+member.getEmail_server());
-		logger.debug("ìš°í¸ë²ˆí˜¸ "+member.getZipcode());
-		logger.debug("ì£¼ì†Œ "+member.getAddr());
-		logger.debug("ì£¼ì†Œ "+member.getAddr_detail());
-		
-		memberService.regist(member);
-		
-		StringBuffer sb = new StringBuffer();
-		sb.append("{");
-		sb.append(" \"result\":1, ");
-		sb.append(" \"msg\":\"íšŒì›ê°€ì… ì„±ê³µ\"");
-		sb.append("}");
-		
-		return sb.toString();
-	} 
-	
-	//íšŒì›ê°€ì… í¼ ìš”ì²­
-	@RequestMapping(value="/petshop/login")
-	public ModelAndView getLogin() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("shop/member/login");
-		
-		return mav;
-	}
+      return memberService.userIdCheck(user_id);
+   }
+   
+   //È¸¿ø°¡ÀÔ ¿äÃ» Ã³¸® 
+   @RequestMapping(value="/shop/member/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
+   @ResponseBody
+   public String regist(Member member) {
+      logger.debug("¾ÆÀÌµğ "+member.getUser_id());
+      logger.debug("ÀÌ¸§ "+member.getName());
+      logger.debug("ÀÌ¸§ "+member.getPhone());
+      logger.debug("ºñ¹ø "+member.getPassword());
+      logger.debug("ÀÌ¸ŞÀÏid "+member.getEmail_id());
+      logger.debug("ÀÌ¸ŞÀÏserver "+member.getEmail_server());
+      logger.debug("¿ìÆí¹øÈ£ "+member.getZipcode());
+      logger.debug("ÁÖ¼Ò "+member.getAddr());
+      logger.debug("ÁÖ¼Ò "+member.getAddr_detail());
+      
+      memberService.regist(member);
+      
+      StringBuffer sb = new StringBuffer();
+      sb.append("{");
+      sb.append(" \"result\":1, ");
+      sb.append(" \"msg\":\"È¸¿ø°¡ÀÔ ¼º°ø\"");
+      sb.append("}");
+      
+      return sb.toString();
+   } 
+   
+   //·Î±×ÀÎ Æû ¿äÃ»
+   @RequestMapping(value="/petshop/login")
+   public ModelAndView getLogin(HttpServletRequest request) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("shop/member/login");
+      
+      return mav;
+   }
+   
+   //·Î±×ÀÎ ¿äÃ» Ã³¸®
+   @RequestMapping(value="/petshop/loginRequest", method=RequestMethod.POST)
+   public String login(Member member, Admin admin, HttpServletRequest request) {
+	  List<MemberType> memberTypeList = memberTypeService.selectAll();
+	  HttpSession session=request.getSession();
+	  String view = "";
+	  Admin admin_obj = null;
+	  Member member_obj = null;
+	  boolean loginCheck = false;
+	  
+	  logger.debug("admin val"+admin.getUser_id());
+	  logger.debug("member val"+member.getUser_id());
+	  
+	  for(MemberType memberType : memberTypeList) {
+		  if(memberType.getMember_type_id() == 1) {
+			  for(int i = 0; i < memberType.getAdmin().size(); i++) {
+				  admin_obj = memberType.getAdmin().get(i);
+				  if(admin_obj.getUser_id().equals(admin.getUser_id())) {
+					  if(admin_obj.getPassword().equals(admin.getPassword())) {
+						  session.setAttribute("admin", admin_obj); //ÇöÀç Å¬¶óÀÌ¾ğÆ® ¿äÃ»°ú ¿¬°èµÈ ¼¼¼Ç¿¡ º¸°üÇØ ³õ´Â´Ù
+						  loginCheck = true;
+						  
+						  view = "redirect:/admin";
+					  }
+				  }
+			  }
+		  }else if(memberType.getMember_type_id() == 2) {
+			  for(int i = 0; i < memberType.getMember().size(); i++) {
+				  member_obj = memberType.getMember().get(i);
+				  if(member_obj.getUser_id().equals(member.getUser_id())) {
+					  if(member_obj.getPassword().equals(member.getPassword())) {
+						  session.setAttribute("member", member_obj); //ÇöÀç Å¬¶óÀÌ¾ğÆ® ¿äÃ»°ú ¿¬°èµÈ ¼¼¼Ç¿¡ º¸°üÇØ ³õ´Â´Ù
+						  loginCheck = true;
+						  
+						  view = "redirect:/";
+					  }
+				  }
+			  }
+		  }
+	  }
+	  if(loginCheck) {
+		  throw new MemberNotFoundException("·Î±×ÀÎ Á¤º¸°¡ ¾Ë¸ÂÁö ¾Ê½À´Ï´Ù.");
+	  }
+      
+	  return view;
+   }
+   
+   //·Î±×¾Æ¿ô ¿äÃ» Ã³¸® 
+   @RequestMapping(value="/petshop/logoutRequest", method=RequestMethod.GET)
+   public ModelAndView logout(HttpServletRequest request) {
+      request.getSession().invalidate(); //¼¼¼Ç ¹«È¿È­, ÀÌ½ÃÁ¡ºÎÅÍ ´ã°ÜÁø µ¥ÀÌÅÍ°¡ ´Ù ¹«È¿°¡ µÈ´Ù
+      MessageData messageData = new MessageData();
+      messageData.setResultCode(1);
+      messageData.setMsg("·Î±×¾Æ¿ô µÇ¾ú½À´Ï´Ù");
+      messageData.setUrl("/");
+      
+      ModelAndView mav = new ModelAndView("shop/error/message");
+      mav.addObject("messageData", messageData);
+      return mav;
+   }
+   
+   //¿¹¿ÜÃ³¸®------------------------------------------------------------------------------------------------------
+   //È¸¿ø°¡ÀÔ ¿¹¿Ü
+   @ExceptionHandler(MemberRegistException.class)
+   @ResponseBody
+   public String handleException(MemberRegistException e) {
+      StringBuffer sb = new StringBuffer();
+      sb.append("{");
+      sb.append(" \"result\":0, ");
+      sb.append(" \"msg\":\""+e.getMessage()+"\"");
+      sb.append("}");
+      
+      return sb.toString();
+   }
+   
+   //¸ŞÀÏ¹ß¼Û ¿¹¿Ü
+   @ExceptionHandler(MailSendException.class)
+   public ModelAndView handleException(MailSendException e) {
+      ModelAndView mav = new ModelAndView();
+      mav.addObject("msg", e.getMessage()); //»ç¿ëÀÚ°¡ º¸°ÔµÉ ¿¡·¯ ¸Ş½ÃÁö
+      mav.setViewName("shop/error/result");
+      
+      return mav;
+   }
+
+   //·Î±×ÀÎ ¿¹¿Ü
+   @ExceptionHandler(MemberNotFoundException.class)
+   public ModelAndView handleException(MemberNotFoundException e) {
+      ModelAndView mav = new ModelAndView();
+      mav.addObject("msg", e.getMessage());
+      mav.setViewName("shop/error/result");
+      
+      return mav;
+   }
 }

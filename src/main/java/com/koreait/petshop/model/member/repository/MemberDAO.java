@@ -5,10 +5,10 @@ import java.util.List;
 import com.koreait.petshop.model.domain.Member;
 
 public interface MemberDAO {
-	public List selectAll();//ëª¨ë“  íšŒì›ê°€ì ¸ì˜¤ê¸°
-	public Member select(Member member); //íšŒì›1ëª… ê°€ì ¸ì˜¤ê¸°
-	public void insert(Member member);//íšŒì›ë“±ë¡
-	public void update(Member member); //íšŒì›ì •ë³´ ìˆ˜ì •
-	public void delete(Member member); //íšŒì›ì •ë³´ ì‚­ì œ 
-	public int checkOverId(String user_id); //ì•„ì´ë”” ì¤‘ë³µ ì²´í¬
+   public List selectAll();//¸ğµç È¸¿ø°¡Á®¿À±â
+   public Member select(Member member); //È¸¿ø1¸í °¡Á®¿À±â
+   public void insert(Member member);//È¸¿øµî·Ï
+   public void update(Member member); //È¸¿øÁ¤º¸ ¼öÁ¤
+   public void delete(Member member); //È¸¿øÁ¤º¸ »èÁ¦ 
+   public int checkOverId(String user_id); //¾ÆÀÌµğ Áßº¹ Ã¼Å©
 }

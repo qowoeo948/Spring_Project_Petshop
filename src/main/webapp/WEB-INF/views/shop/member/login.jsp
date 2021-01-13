@@ -10,7 +10,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fashi | Template</title>
 
-	<%@ include file="../inc/header.jsp" %>
+   <%@ include file="../inc/header.jsp" %>
+   <script type="text/javascript">
+      function login(){
+         $("#loginForm").attr({
+            action:"/petshop/loginRequest",
+            method:"post"
+         });
+         $("#loginForm").submit();
+      }
+   </script>
 </head>
 
 <body>
@@ -45,14 +54,14 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="login-form">
                         <h2>Login</h2>
-                        <form action="#">
+                        <form id="loginForm">
                             <div class="group-input">
                                 <label for="username">Username or email address *</label>
-                                <input type="text" id="username">
+                                <input type="text" id="username" name="user_id">
                             </div>
                             <div class="group-input">
                                 <label for="pass">Password *</label>
-                                <input type="text" id="pass">
+                                <input type="password" id="pass" name="password">
                             </div>
                             <div class="group-input gi-check">
                                 <div class="gi-more">
@@ -64,7 +73,7 @@
                                     <a href="#" class="forget-pass">Forget your Password</a>
                                 </div>
                             </div>
-                            <button type="submit" class="site-btn login-btn">Sign In</button>
+                            <button type="button" class="site-btn login-btn" onclick="login()">Sign In</button>
                         </form>
                         <div class="switch-login">
                             <a href="/petshop/register" class="or-login">Or Create An Account</a>
@@ -115,7 +124,7 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-	<%@ include file="../inc/footerscript.jsp" %>
+   <%@ include file="../inc/footerscript.jsp" %>
 </body>
 
 </html>
