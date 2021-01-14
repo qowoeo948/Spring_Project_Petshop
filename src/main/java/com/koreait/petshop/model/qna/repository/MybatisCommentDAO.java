@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.koreait.petshop.model.domain.Comment;
+import com.koreait.petshop.model.domain.Comments;
 
 @Repository
 public class MybatisCommentDAO implements CommentDAO{
@@ -21,7 +21,7 @@ public class MybatisCommentDAO implements CommentDAO{
 	}
 
 	@Override
-	public void insert(Comment comment) {
+	public void insert(Comments comment) {
 		sqlSessionTemplate.insert("Comment.insert",comment);
 		
 	}

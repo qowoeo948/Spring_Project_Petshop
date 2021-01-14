@@ -12,19 +12,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
-	@RequestMapping(value="/",method = RequestMethod.GET)
-	public ModelAndView main(HttpServletRequest request) {
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");	
-		
-		return mav;
-	}
-	
-	@RequestMapping(value="/shop/test",method=RequestMethod.GET)
-	public ModelAndView test(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("shop/test");	
-		return mav;
-	}
+   @RequestMapping(value="/",method = RequestMethod.GET)
+   public ModelAndView main(HttpServletRequest request) {
+      
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("index");   
+      
+      return mav;
+   }
+   
+   @RequestMapping(value="/shop/test",method=RequestMethod.GET)
+   public ModelAndView test(HttpServletRequest request) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("shop/test");   
+      return mav;
+   }
 }

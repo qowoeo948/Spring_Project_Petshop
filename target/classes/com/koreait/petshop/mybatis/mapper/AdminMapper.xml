@@ -20,8 +20,8 @@
 	</select>
 	
 	<!-- 한건 조회하기 -->
-	<select id="selectAllById" resultType="Member" parameterType="int">
-      select * from member where member_type_id=#{member_type_id}
+	<select id="selectAllById" resultType="Admin" parameterType="int">
+      select * from admin where member_type_id=#{member_type_id}
 	</select>
 	
 </mapper>

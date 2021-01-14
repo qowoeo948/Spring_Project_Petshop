@@ -15,8 +15,8 @@ import lombok.Data;
 public class FileManager {
 	private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
 	
-	private String saveBasicDir="/resources/data/basic";
-	private String saveAddonDir="/resources/data/addon";
+	private String saveBasicDir="/resources/pro/basic";
+	private String saveAddonDir="/resources/pro/addon";
 
 	public static String getExtend(String path) {
 		int lastIndex = path.lastIndexOf(".");

@@ -20,6 +20,7 @@ import com.koreait.petshop.exception.MailSendException;
 import com.koreait.petshop.exception.MemberNotFoundException;
 import com.koreait.petshop.exception.MemberRegistException;
 import com.koreait.petshop.model.common.MessageData;
+import com.koreait.petshop.model.common.SecureManager;
 import com.koreait.petshop.model.domain.Admin;
 import com.koreait.petshop.model.domain.Member;
 import com.koreait.petshop.model.domain.MemberType;
@@ -40,11 +41,24 @@ public class MemberController {
    @Autowired
    private AdminService adminService;
    
-   //회원가입 폼 요청
+   //암호화 객체 
+   @Autowired
+   private SecureManager secureManager;
+   
+   //클라이언트 회원가입 폼 요청
    @RequestMapping(value="/petshop/register")
-   public ModelAndView getRegister(HttpServletRequest request) {
+   public ModelAndView getClientRegister(HttpServletRequest request) {
       ModelAndView mav = new ModelAndView();
       mav.setViewName("shop/member/register");
+      
+      return mav;
+   }
+   
+   //관리자 회원가입 폼 요청
+   @RequestMapping(value="/admin/register")
+   public ModelAndView getAdminRegister(HttpServletRequest request) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("admin/member/register");
       
       return mav;
    }
@@ -58,10 +72,10 @@ public class MemberController {
       return memberService.userIdCheck(user_id);
    }
    
-   //회원가입 요청 처리 
+   //클라이언트 회원가입 요청 처리 
    @RequestMapping(value="/shop/member/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
    @ResponseBody
-   public String regist(Member member) {
+   public String regist(Member member,HttpServletRequest request) {
       logger.debug("아이디 "+member.getUser_id());
       logger.debug("이름 "+member.getName());
       logger.debug("이름 "+member.getPhone());
@@ -73,6 +87,25 @@ public class MemberController {
       logger.debug("주소 "+member.getAddr_detail());
       
       memberService.regist(member);
+      
+      StringBuffer sb = new StringBuffer();
+      sb.append("{");
+      sb.append(" \"result\":1, ");
+      sb.append(" \"msg\":\"회원가입 성공\"");
+      sb.append("}");
+      
+      return sb.toString();
+   }
+   
+   //관리자 회원가입 요청 처리 
+   @RequestMapping(value="/shop/admin/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
+   @ResponseBody
+   public String regist(Admin admin,HttpServletRequest request) {
+      logger.debug("아이디 "+admin.getEmp_id());
+      logger.debug("아이디 "+admin.getUser_id());
+      logger.debug("비번 "+admin.getPassword());
+      
+      adminService.regist(admin);
       
       StringBuffer sb = new StringBuffer();
       sb.append("{");
@@ -94,49 +127,55 @@ public class MemberController {
    
    //로그인 요청 처리
    @RequestMapping(value="/petshop/loginRequest", method=RequestMethod.POST)
-   public String login(Member member, Admin admin, HttpServletRequest request) {
-	  List<MemberType> memberTypeList = memberTypeService.selectAll();
-	  HttpSession session=request.getSession();
-	  String view = "";
-	  Admin admin_obj = null;
-	  Member member_obj = null;
-	  boolean loginCheck = false;
-	  
-	  logger.debug("admin val"+admin.getUser_id());
-	  logger.debug("member val"+member.getUser_id());
-	  
-	  for(MemberType memberType : memberTypeList) {
-		  if(memberType.getMember_type_id() == 1) {
-			  for(int i = 0; i < memberType.getAdmin().size(); i++) {
-				  admin_obj = memberType.getAdmin().get(i);
-				  if(admin_obj.getUser_id().equals(admin.getUser_id())) {
-					  if(admin_obj.getPassword().equals(admin.getPassword())) {
-						  session.setAttribute("admin", admin_obj); //현재 클라이언트 요청과 연계된 세션에 보관해 놓는다
-						  loginCheck = true;
-						  
-						  view = "redirect:/admin";
-					  }
-				  }
-			  }
-		  }else if(memberType.getMember_type_id() == 2) {
-			  for(int i = 0; i < memberType.getMember().size(); i++) {
-				  member_obj = memberType.getMember().get(i);
-				  if(member_obj.getUser_id().equals(member.getUser_id())) {
-					  if(member_obj.getPassword().equals(member.getPassword())) {
-						  session.setAttribute("member", member_obj); //현재 클라이언트 요청과 연계된 세션에 보관해 놓는다
-						  loginCheck = true;
-						  
-						  view = "redirect:/";
-					  }
-				  }
-			  }
-		  }
-	  }
-	  if(loginCheck) {
-		  throw new MemberNotFoundException("로그인 정보가 알맞지 않습니다.");
-	  }
+   public ModelAndView login(Member member, Admin admin, HttpServletRequest request) {
+     ModelAndView mav = new ModelAndView();
+     List<MemberType> memberTypeList = memberTypeService.selectAll();
+     HttpSession session=request.getSession();
+     String view = "";
+     Admin admin_obj = null;
+     Member member_obj = null;
+     boolean loginCheck = false;
+     
+     for(MemberType memberType : memberTypeList) {
+        if(memberType.getMember_type_id() == 1) {
+           for(int i = 0; i < memberType.getAdmin().size(); i++) {
+              admin_obj = memberType.getAdmin().get(i);
+              if(admin_obj.getUser_id().equals(admin.getUser_id())) {
+                 logger.debug("admin Id OK");
+                // String hash = secureManager.getSecureData(admin.getPassword());
+                 //admin.setPassword(hash); //VO에 해쉬값 대입
+                 if(admin_obj.getPassword().equals(admin.getPassword())) {
+                    logger.debug("admin Pass OK");
+                    session.setAttribute("admin", admin_obj); //현재 클라이언트 요청과 연계된 세션에 보관해 놓는다
+                    loginCheck = true;
+                    
+                    mav.setViewName("redirect:/admin");
+                 }
+              }
+           }
+        }else if(memberType.getMember_type_id() == 2) {
+           for(int i = 0; i < memberType.getMember().size(); i++) {
+              member_obj = memberType.getMember().get(i);
+              if(member_obj.getUser_id().equals(member.getUser_id())) {
+                 logger.debug("member Id OK");
+                 String hash = secureManager.getSecureData(member.getPassword());
+                 member.setPassword(hash); //VO에 해쉬값 대입
+                 if(member_obj.getPassword().equals(member.getPassword())) {
+                    logger.debug("member Pass OK");
+                    session.setAttribute("member", member_obj); //현재 클라이언트 요청과 연계된 세션에 보관해 놓는다
+                    loginCheck = true;
+                    
+                    mav.setViewName("redirect:/");
+                 }
+              }
+           }
+        }
+     }
+     if(!loginCheck) {
+        throw new MemberNotFoundException("로그인 정보가 알맞지 않습니다.");
+     }
       
-	  return view;
+     return mav;
    }
    
    //로그아웃 요청 처리 
@@ -150,6 +189,16 @@ public class MemberController {
       
       ModelAndView mav = new ModelAndView("shop/error/message");
       mav.addObject("messageData", messageData);
+      return mav;
+   }
+   
+   
+   //회원목록 가져오기
+   @RequestMapping(value="/admin/member/list", method=RequestMethod.GET )
+   public ModelAndView getMemberList(HttpServletRequest request) {
+      ModelAndView mav = new ModelAndView("admin/member/member_list");
+      List memberList = memberService.selectAll();
+      mav.addObject("memberList", memberList);
       return mav;
    }
    

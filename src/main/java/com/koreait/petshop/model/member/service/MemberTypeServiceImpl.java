@@ -9,12 +9,12 @@ import com.koreait.petshop.model.member.repository.MemberTypeDAO;
 
 @Service
 public class MemberTypeServiceImpl implements MemberTypeService{
-	@Autowired
-	private MemberTypeDAO memberTypeDAO;
+   @Autowired
+   private MemberTypeDAO memberTypeDAO;
 
-	@Override
-	public List selectAll() {
-		return memberTypeDAO.selectAll();
-	}
+   @Override
+   public List selectAll() {
+      return memberTypeDAO.selectAll();
+   }
 
 }

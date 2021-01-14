@@ -3,7 +3,10 @@
 <mapper namespace="Board">
 	
 	<select id="selectAll" resultType="Board">
-		select *from board order by board_id desc
+		select b.board_id as board_id, title, writer, regdate, hit, count(c.comments_id) as cnt
+		from board b left outer join comments c
+		on b.board_id = c.board_id
+		group by b.board_id, title, writer, regdate, hit order by b.board_id desc
 	</select>
 
 	<select id="select" resultType="Board" parameterType="int">

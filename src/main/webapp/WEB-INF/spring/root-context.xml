@@ -20,7 +20,12 @@
 	<bean id="dataSourceTransactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
-
+		
+	<!-- Spring JDBC 사용시 -->
+	<bean id="jdbcTemplate" 
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource"/>							
+		
 	<!-- Mybatis Spring -->
 	<bean id="sqlSessionFactoryBean"
 		class="org.mybatis.spring.SqlSessionFactoryBean"
@@ -32,8 +37,26 @@
 		<constructor-arg ref="sqlSessionFactoryBean" />
 	</bean>
 
+		<!-- 업로드를 위한 설정 : 주의- id가 정해져있다 개발자가 맘대로 바꾸면 안됨 -->
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
 	<context:component-scan
 		base-package="com.koreait.petshop.model" />
 
-
+		<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list value-type="java.util.ArrayList">
+				 <ref bean="mappingJackson2HttpMessageConverter"/>
+			</list>
+		</property>				
+	</bean>
+	
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=utf-8</value>
+			</list>
+		</property>	
+	</bean>
 </beans>

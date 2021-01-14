@@ -1,5 +1,10 @@
+<%@page import="com.koreait.petshop.model.domain.SubCategory"%>
+<%@page import="com.koreait.petshop.model.domain.TopCategory"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=utf-8"%>
-
+<%
+	List<TopCategory> topList = (List)request.getAttribute("topList");
+%>
 <style>
 #logo3{
 	text-align: center;
@@ -106,39 +111,37 @@
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
                         <span>All departments</span>
+                        <!-- ------------------------------------------------ -->
                         <ul class="depart-hover">
-                            <li class="active"><a href="#">Womenâs Clothing</a></li>
-                            <li><a href="#">Menâs Clothing</a></li>
-                            <li><a href="#">Underwear</a></li>
-                            <li><a href="#">Kid's Clothing</a></li>
-                            <li><a href="#">Brand Fashion</a></li>
-                            <li><a href="#">Accessories/Shoes</a></li>
-                            <li><a href="#">Luxury Brands</a></li>
-                            <li><a href="#">Brand Outdoor Apparel</a></li>
+                        	<%for(TopCategory topCategory : topList) {%>
+                            	<li style="border-bottom: 1px solid #EEEEEE;"><a href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a></li>
+                            <%} %>
                         </ul>
                     </div>
                 </div>
                 <nav class="nav-menu mobile-menu">
                     <ul>
                         <li><a href="/">Home</a></li>
-                        <li><a href="./shop.html">Shop</a></li>
-                        <li><a href="#">Collection</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Men's</a></li>
-                                <li><a href="#">Women's</a></li>
-                                <li><a href="#">Kid's</a></li>
-                            </ul>
-                        </li>
+                        <li><a href="/shop/product/topList?topcategory_id=1">Shop</a></li>
                         <li><a href="/shop/contact">Contact</a></li>
                         <li><a href="/shop/qna/list">QNA</a></li>
-                        <li><a href="#">Pages</a>
+                        <li><a href="#">Management</a>
                            <ul class="dropdown">
-                                <li><a href="/petshop/register">Register</a></li>
-                                <%if(session.getAttribute("member")==null){ //세션에 담겨진 데이터가 없다면%>
+                               	<%if(session.getAttribute("admin")!=null) {%>
+                               	    <li><a href="/admin/product/list">Product</a></li>
+                                	<li><a href="/admin/member/list">Member</a></li>
+                                	<li><a href="#">Order</a></li>
+	                                <li><a href="/admin/register">Register</a></li>
+                               	<%}else{ %>
+	                                <li><a href="/petshop/register">Register</a></li>
+                               	<%} %>
+                                <%if(session.getAttribute("member")==null && session.getAttribute("admin")==null){ //세션에 담겨진 데이터가 없다면%>
                                    <li><a href="/petshop/login">Login</a></li>
                                 <%}else{ %>
                                    <li><a href="/petshop/logoutRequest">LogOut</a></li>
-                                   <li><a href="/petshop/logoutRequest">Cart</a></li>
+                                   <%if(session.getAttribute("admin")==null) {%>
+                                   	<li><a href="/petshop/logoutRequest">Cart</a></li>
+                                   <%} %>
                                 <%} %>
                             </ul>
                         </li>

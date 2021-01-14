@@ -9,13 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ContactController {
-	@RequestMapping(value="/shop/contact",method = RequestMethod.GET)
-	public ModelAndView adminMain(HttpServletRequest request) {
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("shop/contact");	
-		
-		return mav;
+   @RequestMapping(value="/shop/contact",method = RequestMethod.GET)
+   public ModelAndView adminMain(HttpServletRequest request) {
+      
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("shop/contact");   
+      
+      return mav;
 
 }
 

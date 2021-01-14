@@ -8,14 +8,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdminController {
-	//관리자 모드 메인 요청
-	@RequestMapping(value="/admin")
-	public ModelAndView adminMain(HttpServletRequest request) {
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/main");	
-		
-		return mav;
+   //관리자 모드 메인 요청
+   @RequestMapping(value="/admin")
+   public ModelAndView adminMain(HttpServletRequest request) {
+      
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("admin/main");   
+      
+      return mav;
 
 }
 }

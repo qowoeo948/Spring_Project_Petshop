@@ -12,12 +12,12 @@
 		
 		<!-- 회원관련 -->
 		<typeAlias type="com.koreait.petshop.model.domain.MemberType" alias="MemberType"/>     
-		<typeAlias type="com.koreait.petshop.model.domain.Member" alias="Member"/>     
-		<typeAlias type="com.koreait.petshop.model.domain.Admin" alias="Admin"/>     
+      <typeAlias type="com.koreait.petshop.model.domain.Member" alias="Member"/>     
+      <typeAlias type="com.koreait.petshop.model.domain.Admin" alias="Admin"/>       
 		
 		<!-- 게시판 관련 -->
 		<typeAlias type="com.koreait.petshop.model.domain.Board" alias="Board"/>
-		<typeAlias type="com.koreait.petshop.model.domain.Comment" alias="Comment"/>
+		<typeAlias type="com.koreait.petshop.model.domain.Comments" alias="Comments"/>
 
 		
 	</typeAliases>
@@ -29,13 +29,13 @@
     <mapper resource="com/koreait/petshop/mybatis/mapper/ImageMapper.xml"/>
 	
 	<!-- 회원관련 -->
-	<mapper resource="com/koreait/petshop/mybatis/mapper/MemberTypeMapper.xml"/>
-	<mapper resource="com/koreait/petshop/mybatis/mapper/MemberMapper.xml"/>
-	<mapper resource="com/koreait/petshop/mybatis/mapper/AdminMapper.xml"/>
+   <mapper resource="com/koreait/petshop/mybatis/mapper/MemberTypeMapper.xml"/>
+   <mapper resource="com/koreait/petshop/mybatis/mapper/MemberMapper.xml"/>
+   <mapper resource="com/koreait/petshop/mybatis/mapper/AdminMapper.xml"/>
 	
 	<!-- 게시판 관련 -->
     <mapper resource="com/koreait/petshop/mybatis/mapper/BoardMapper.xml"/>
-    <mapper resource="com/koreait/petshop/mybatis/mapper/CommentMapper.xml"/>
+    <mapper resource="com/koreait/petshop/mybatis/mapper/CommentsMapper.xml"/>
     
   </mappers>
 </configuration>

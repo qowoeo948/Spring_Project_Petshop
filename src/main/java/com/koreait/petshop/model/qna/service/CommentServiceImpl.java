@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.koreait.petshop.model.domain.Comment;
+import com.koreait.petshop.model.domain.Comments;
 import com.koreait.petshop.model.qna.repository.CommentDAO;
 
 @Service
@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public void insert(Comment comment) {
+	public void insert(Comments comment) {
 		commentDAO.insert(comment);
 	}
 

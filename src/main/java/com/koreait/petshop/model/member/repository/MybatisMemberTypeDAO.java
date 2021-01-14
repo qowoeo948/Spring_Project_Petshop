@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MybatisMemberTypeDAO implements MemberTypeDAO{
-	@Autowired
-	private SqlSessionTemplate sqlSessionTemplate;
+   @Autowired
+   private SqlSessionTemplate sqlSessionTemplate;
 
-	@Override
-	public List selectAll() {
-		return sqlSessionTemplate.selectList("MemberType.selectAll");
-	}
+   @Override
+   public List selectAll() {
+      return sqlSessionTemplate.selectList("MemberType.selectAll");
+   }
 
 }

@@ -18,10 +18,10 @@
 		 	property="member" 
 		 	javaType="java.util.List" 
 		 	ofType="Member" 
-		 	select="Member.selectAllById"/>
+		 	select="Member.selectAllById"/> 
 	</resultMap>
 	
-	<select id="selectAll" resultType="MemberType">
+	<select id="selectAll" resultMap="joinAdminMember">
 		select * from member_type
 	</select>
 	
