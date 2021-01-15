@@ -23,6 +23,8 @@
 		select *from topcategory order by rank asc
 	</select>
 
-	
+	<select id="select" parameterType="int" resultMap="joinSubcategory">
+		select * from topcategory where topcategory_id=#{topcategory_id}	
+	</select>
 	
 </mapper>

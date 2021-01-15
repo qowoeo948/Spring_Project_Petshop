@@ -49,9 +49,9 @@ public class MybatisImageDAO implements ImageDAO{
 	}
 
 	@Override
-	public void delete(int image_id) throws ProductRegistException{
-		// TODO Auto-generated method stub
-		
+	public void delete(int product_id) throws ProductRegistException {
+		sqlSessionTemplate.delete("Image.delete", product_id);
+
 	}
 
 }

@@ -13,13 +13,6 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@ include file="../../shop/inc/header.jsp" %>
-<script>
-$(function(){
-   $("button").click(function(){
-      location.href="/admin/product/registform"; //글쓰기 폼 요청
-   });
-});
-</script>
 <style type="text/css">
 table {
    border-collapse: collapse;
@@ -51,6 +44,15 @@ tr:nth-child(even) {
         margin:20px 100px 20px 100px;   /*위오아왼*/
       }
 </style>
+<script>
+
+
+function regist(){
+    location.href="/admin/product/registform"; //글쓰기 폼 요청
+   
+}
+   
+</script>
 </head>
 <body>
 
@@ -65,6 +67,8 @@ tr:nth-child(even) {
          <th>카테고리명</th>
          <th>상품명</th>
          <th>가격</th>
+         <th>상품삭제</th>
+         <th>히트상품</th>
       </tr>
        <%int num = pager.getNum(); %>
      <%int curPos = pager.getCurPos(); %>
@@ -77,10 +81,20 @@ tr:nth-child(even) {
          <td><%=product.getSubCategory().getName() %></td>
          <td><%=product.getProduct_name() %></td>
          <td><%=product.getPrice() %></td>
+         <td><a href="/admin/product/delete?product_id=<%=product.getProduct_id() %>">상품삭제</a></td>
+         <%if(product.getHit()==1){ %>
+         <td>
+         ★
+         </td>
+         <%}else{ %>
+         <td>
+         ☆
+         </td>
+         <%} %>
       </tr>
       <%}%>
       <tr>
-      <td colspan="5" style="text-align:center">
+      <td colspan="7" style="text-align:center">
 
    <%if((pager.getFirstPage()-1)>=1){   //페이지가 있다면%> 
       <a href="/admin/product/list?currentPage=<%=pager.getFirstPage()-1%>">◀</a>
@@ -101,8 +115,8 @@ tr:nth-child(even) {
       </td>
    </tr>
       <tr>
-         <td colspan="6" style="text-align:center">
-            <button>상품등록</button>
+         <td colspan="7" style="text-align:center">
+            <button onClick="regist()">상품등록</button>
          </td>
       </tr>
    </table>   

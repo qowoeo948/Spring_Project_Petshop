@@ -2,6 +2,7 @@
 <%@page import="com.koreait.petshop.model.domain.Product"%>
 <%@ page contentType="text/html;charset=utf-8"%>
 <%
+	List<SubCategory> subList = (List)request.getAttribute("subList");
 	List<Product> productList = (List)request.getAttribute("productList");
 	String topCategory_id = request.getParameter("topcategory_id");
 	String subCategory_id = request.getParameter("subcategory_id");
@@ -17,6 +18,43 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fashi | Template</title>
 	<%@ include file="../inc/header.jsp" %>
+	<script type="text/javascript">
+	$(function(){
+		//product-quicview를 클릭했을때...
+		$(".quick-view").on("click", function(e){
+			var obj = e.target;
+			var product_id=$("#product_id").val();
+			var subcategory_name=$("#subcategory_name").val();
+			var product_name=$("#product_name").val();
+			var price=$("#price").val();
+			var detail=$("#detail").val();
+			var filename=$("#filename").val();
+			
+			console.log("product_id "+product_id);
+			console.log("subcategory_name "+subcategory_name);
+			console.log("product_name "+product_name);
+			console.log("price "+price);
+			console.log("detail "+detail);
+			console.log("filename "+filename);
+
+			//퀵뷰창의 상품 정보에 출력
+			
+			//이미지
+			$(".quickview_pro_img img").attr({
+				src:"/resources/pro/basic/"+product_id+"."+filename
+			});
+			
+			$(".quickview_pro_des .title").html(product_name);//상품명
+			$(".quickview_pro_des .price").html(price);//가격
+			$(".quickview_pro_des p").html(detail);//상세내용
+			
+			$(".quickview_pro_des a").on("click", function(e){
+				location.href="/shop/product/detail?product_id="+product_id;
+			});
+		});
+		
+	});
+	</script>
 </head>
 
 <body>
@@ -47,22 +85,41 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
                     <div class="filter-widget">
-                        <h4 class="fw-title">Categories</h4>
-                        <ul class="filter-catagories">
-                        	<%for(TopCategory topCategory : topList) {%>
-                        		<%List<SubCategory> subList = topCategory.getSubCategory(); %>
-                        		<%for(SubCategory subCategory : subList) {%>
-                        			<%if(subCategory_id==null) {%>
-	                        			<%if(subCategory.getTopcategory_id() == Integer.parseInt(topCategory_id)) {%>
-				                            <li><a href="/shop/product/subList?subcategory_id=<%=subCategory.getSubcategory_id()%>"><%=subCategory.getName() %></a></li>
-			                            <%} %>
-		                            <%}else{ %>
-	                        			<%if(subCategory.getSubcategory_id() == Integer.parseInt(subCategory_id)) {%>
-				                            <li><a href="/shop/product/subList?subcategory_id=<%=subCategory.getSubcategory_id()%>"><%=subCategory.getName() %></a></li>
-			                            <%} %>
-		                            <%} %>
+	                    <h4 class="fw-title">TopCategories</h4>
+	                    <ul class="filter-catagories">
+	                	<%for(TopCategory topCategory : topList) {%>
+	                		<%if(subCategory_id==null) {%>
+		                		<%if(topCategory.getTopcategory_id() == Integer.parseInt(topCategory_id)){ %>
+		                       		<li style="border-bottom: 1px solid #EEEEEE; "><a id="top_getProduct" href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a><span style="color:red;">V</span></li>
+			                    <%}else{ %>
+		                       		<li style="border-bottom: 1px solid #EEEEEE; "><a id="top_getProduct" href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a></li>
+			                    <%} %>
+		                    <%}else{ %>
+		                    	<%for(SubCategory subCategory : subList){ %>
+			                		<%if(topCategory.getTopcategory_id() == subCategory.getTopcategory_id()){ %>
+			                       		<li style="border-bottom: 1px solid #EEEEEE; "><a id="top_getProduct" href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a><span style="color:red;">V</span></li>
+				                    <%}else{ %>
+			                       		<li style="border-bottom: 1px solid #EEEEEE; "><a id="top_getProduct" href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a></li>
+				                    <%} %>
+			                    <%} %>
+		                    <%} %>
+	                    <%} %>
+                        </ul>
+                    </div>
+                    <div class="filter-widget">
+                        <h4 class="fw-title">SubCategories</h4>
+                        <ul class="filter-catagories" id="subCategory">
+                      	<%for(SubCategory subCategory : subList) {%>
+                      		<%if(subCategory_id==null) {%>
+                       			<%if(subCategory.getTopcategory_id() == Integer.parseInt(topCategory_id)) {%>
+		                            <li><a href="/shop/product/subList?subcategory_id=<%=subCategory.getSubcategory_id()%>"><%=subCategory.getName() %></a></li>
+	                            <%} %>
+                            <%}else{ %>
+                      			<%if(subCategory.getSubcategory_id() == Integer.parseInt(subCategory_id)) {%>
+						        	<li><a href="/shop/product/subList?subcategory_id=<%=subCategory.getSubcategory_id()%>"><%=subCategory.getName() %></a><span style="color:red;">V</span></li>
 	                            <%} %>
                             <%} %>
+                        <%} %>
                         </ul>
                     </div>
                     <div class="filter-widget">
@@ -103,18 +160,25 @@
                             <div class="col-lg-4 col-sm-6">
                                 <div class="product-item">
                                     <div class="pi-pic">
-                                        <img src="/resources/img/products/product-1.jpg" alt="">
+                                        <img id="product_image" src="/resources/pro/basic/<%=product.getProduct_id()%>.<%=product.getFilename()%>" alt="">
+                                        <div class="sale pp-sale">Sale</div>
                                         <div class="icon">
                                             <i class="icon_heart_alt"></i>
                                         </div>
                                         <ul>
                                             <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
-                                            <li class="quick-view"><a href="/shop/product/detail?product_id?<%=product.getProduct_id()%>">+ Quick View</a></li>
+                                            <li class="quick-view"><a href="/shop/product/detail?product_id=<%=product.getProduct_id()%>">+ Quick View</a></li>
                                             <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
                                         </ul>
                                     </div>
                                     <div class="pi-text">
-                                       	<div class="catagory-name"><%=product.getSubCategory().getSubcategory_id() %></div>
+                                    	<input type="hidden" id="product_id" value="<%=product.getProduct_id()%>">
+                                    	<input type="hidden" id="subcategory_name" value="<%=product.getSubCategory().getName() %>">
+                                    	<input type="hidden" id="product_name" value="<%=product.getProduct_name() %>">
+                                    	<input type="hidden" id="price" value="<%=Formatter.getCurrency(product.getPrice())%>">
+                                    	<input type="hidden" id="detail" value="<%=product.getDetail() %>">
+                                    	<input type="hidden" id="filename" value="<%=product.getFilename() %>">
+                                       	<div class="catagory-name"><%=product.getSubCategory().getName() %></div>
                                         <a href="#">
                                             <h5><%=product.getProduct_name() %></h5>
                                         </a>

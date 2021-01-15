@@ -6,12 +6,12 @@
                 <div class="col-lg-3">
                     <div class="footer-left">
                         <div class="footer-logo">
-                            <a href="#"><img src="/resources/img/footer-logo.png" alt=""></a>
+                            <a href="/"><img src="/resources/img/logo-3.png" alt="" style="width:120px; height:120px;"></a>
                         </div>
                         <ul>
-                            <li>Address: 60-49 Road 11378 New York</li>
-                            <li>Phone: +65 11.188.888</li>
-                            <li>Email: hello.colorlib@gmail.com</li>
+                            <li>주소: 경기도 성남시 분당구 서현로210번길 16 유성트윈프라자1차</li>
+                            <li>번호: 010-3377-7086</li>
+                            <li>이메일: qowoeo948@gmail.com</li>
                         </ul>
                         <div class="footer-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
@@ -25,34 +25,36 @@
                     <div class="footer-widget">
                         <h5>Information</h5>
                         <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Serivius</a></li>
+                            <li><a>About Us</a></li>
+                            <li><a>TERMS OF USE</a></li>
+                            <li><a>PRIVACY</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="footer-widget">
-                        <h5>My Account</h5>
+                        <h5>CS/CENTER</h5>
                         <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Shopping Cart</a></li>
-                            <li><a href="#">Shop</a></li>
+                            <li><a>T.02.999.9999</a></li>
+                            <li><a>MONDAY TO FRIDATE 11:00~18:00</a></li>
+                            <li><a>WEEKEND, HOLIDAY IS OFF</a></li>
+                            <li><a>마케팅 제휴 문의:qowoeo948@gmail.com</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="newslatter-item">
-                        <h5>Join Our Newsletter Now</h5>
-                        <p>Get E-mail updates about our latest shop and special offers.</p>
-                        <form action="#" class="subscribe-form">
-                            <input type="text" placeholder="Enter Your Mail">
-                            <button type="button">Subscribe</button>
-                        </form>
+               <div class="col-lg-4">
+                    <div class="footer-widget">
+                        <h5>PETTOPIA CO.,LTD.(주)펫토피아</h5>
+                        <ul>
+                            <li><a>CEO: 홍길동</a></li>
+                            <li><a>사업자번호:124-555-999999</a></li>
+                            <li><a>통신판매업 신고:제2999-서울강남-2424</a></li>
+                            <li><a>경기도 성남시 분당구 서현로210번길 16 유성트윈프라자1차</a></li>
+                        </ul>
                     </div>
                 </div>
+                
+                
             </div>
         </div>
         <div class="copyright-reserved">

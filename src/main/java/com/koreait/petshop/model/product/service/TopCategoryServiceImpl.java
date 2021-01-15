@@ -16,13 +16,12 @@ public class TopCategoryServiceImpl implements TopCategoryService{
 	
 	@Override
 	public List selectAll() {
-		return 	topCategoryDAO.selectAll();
+		return topCategoryDAO.selectAll();
 	}
 
 	@Override
 	public TopCategory select(int topcategory_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return topCategoryDAO.select(topcategory_id);
 	}
 
 	@Override

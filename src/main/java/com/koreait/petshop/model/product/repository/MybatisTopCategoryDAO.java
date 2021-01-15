@@ -21,8 +21,7 @@ public class MybatisTopCategoryDAO implements TopCategoryDAO{
 
 	@Override
 	public TopCategory select(int topcategory_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionTemplate.selectOne("TopCategory.select");
 	}
 
 	@Override

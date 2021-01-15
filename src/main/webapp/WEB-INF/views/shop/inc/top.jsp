@@ -4,6 +4,10 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%
 	List<TopCategory> topList = (List)request.getAttribute("topList");
+	String topcategory_id = "";
+	if(request.getParameter("topcategory_id") != null){
+		topcategory_id = request.getParameter("topcategory_id");
+	}
 %>
 <style>
 #logo3{
@@ -11,6 +15,8 @@
 	
 }
 </style>
+<script type="text/javascript">
+</script>
  <header class="header-section">
         <div class="header-top">
             <div class="container">
@@ -37,15 +43,15 @@
         <div class="container">
             <div class="inner-header">
                 <div class="row">
-                     <div class="col-lg-9 col-md-9">
+                     <div class="col-lg-12 col-md-9">
                         <div class="logo">
-                            <a href="./index.html">
+                            <a href="/">
                                 <img src="/resources/img/logo2.png" alt="">
                             </a>
                         </div>
                     </div>
                    
-                    <div class="col-lg-3 text-right col-md-3">
+                    <div class="col-lg-12 text-right col-md-3">
                         <ul class="nav-right">
                             <li class="heart-icon">
                                 <a href="#">
@@ -114,7 +120,10 @@
                         <!-- ------------------------------------------------ -->
                         <ul class="depart-hover">
                         	<%for(TopCategory topCategory : topList) {%>
-                            	<li style="border-bottom: 1px solid #EEEEEE;"><a href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a></li>
+                        		<%if(topcategory_id != "") {%>
+                        		<input id="topcategory_id" type="hidden" value="<%=topcategory_id%>">
+                        		<%} %>
+                            	<li style="border-bottom: 1px solid #EEEEEE;"><a id="top_getProduct" href="/shop/product/topList?topcategory_id=<%=topCategory.getTopcategory_id()%>"><%=topCategory.getName() %></a></li>
                             <%} %>
                         </ul>
                     </div>
