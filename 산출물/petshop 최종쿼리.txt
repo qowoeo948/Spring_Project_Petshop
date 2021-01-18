@@ -1,0 +1,296 @@
+create tablespace petshop
+datafile 'C:\oraclexe\app\oracle\oradata\XE\petshop.dbf'
+size 10M;
+
+create user petshop
+identified by petshop
+default tablespace petshop
+quota unlimited on petshop;
+
+grant create session, create table, create sequence
+to petshop;
+
+(topcategory)
+create table topcategory(
+  topcategory_id number primary key,
+  name varchar(25),
+  rank number
+);
+
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'위생용품',1);
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'미용용품',2);
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'장난감',3);
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'간식',4);
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'의류',5);
+insert into topcategory(topcategory_id,name,rank) values(seq_topcategory.nextval,'이동장',6);
+
+
+
+(subcategory)
+create table subcategory(
+  subcategory_id number primary key,
+  topcategory_id number,
+  name varchar(25),
+  constraint fk_topcategorysubcategory foreign key(topcategory_id) references topcategory(topcategory_id)
+);
+
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,1,'청결제품');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,1,'연고');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,1,'진드기방지');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,1,'배변');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,1,'기타');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,2,'샴푸린스');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,2,'빗브러쉬');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,2,'미용도구');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,3,'몽이');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,3,'냥이');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,3,'스트레스완화');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,4,'껌');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,4,'쿠키');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,4,'그랜마루시');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,4,'껌');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'구명조끼');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'신발');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'도글라스');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'목줄');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'넥카라');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'강아지의류');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,5,'고양이의류');
+insert into subcategory(subcategory_id,topcategory_id,name) values(seq_subcategory.nextval,6,'가방');
+
+
+(product)
+create table product(
+  product_id number primary key,
+  subcategory_id number,
+  product_name varchar(30),
+  price number default 0,
+  detail clob,
+  constraint fk_subcategoryproduct foreign key(subcategory_id) references subcategory(subcategory_id)
+);
+
+alter table product add hit number;
+
+
+
+
+(cart)
+create table cart(
+  cart_id number primary key,
+  product_id number,
+  member_id number,
+  quantity number default 0,
+  constraint fk_productcart foreign key(product_id) references product(product_id),
+  constraint fk_membercart foreign key(member_id) references member(member_id)
+);
+
+(image)
+create table image(
+  image_id number primary key,
+  product_id number,
+  filename varchar(40),
+  constraint fk_productimage foreign key(product_id) references product(product_id)
+);
+
+
+
+create sequence  seq_topcategory
+increment by 1
+start with 1;
+create sequence  seq_subcategory
+increment by 1
+start with 1;
+create sequence  seq_product
+increment by 1
+start with 1;
+
+create sequence  seq_cart
+increment by 1
+start with 1;
+
+create sequence  seq_image
+increment by 1
+start with 1;
+
+------------------------------------
+게시판
+create table board(
+  board_id number primary key,
+  member_id number,
+  title varchar(100),
+  writer varchar(20),
+  content clob,
+  regdate date default sysdate,
+  hit number default 0,
+  constraint fk_memberboard foreign key (member_id) references member(member_id)
+);
+
+create sequence seq_board
+increment by 1
+start with 1;
+
+create table comments(
+  comments_id number primary key,
+  board_id number,
+  msg varchar(1000),
+  author varchar(20),
+  cdate date default sysdate,
+  constraint fk_boardcomments foreign key (board_id) references board(board_id)
+);
+
+create sequence seq_comments
+increment by 1
+start with 1;
+
+(게시판조인)
+select b.board_id as board_id, title, writer, regdate, hit, count(c.comments_id) as cnt
+from board b left outer join comments c
+on b.board_id = c.board_id
+group by b.board_id, title, writer, regdate, hit order by b.board_id desc;
+
+
+
+
+--------------------------------------------------
+멤버
+
+create table member(
+   member_id number primary key
+    , member_type_id number
+    , user_id varchar(40)
+    , name varchar(40)
+    , phone varchar(20)
+    , password varchar(100)
+    , email_id varchar(40)
+    , email_server varchar(40)
+    , zipcode varchar(20)
+    , addr varchar(150)
+    , addr_detail varchar(150)
+    , regdate date default sysdate
+    , constraint fk_member_typemember foreign key(member_type_id) references member_type(member_type_id)
+);
+
+create sequence seq_member
+increment by 1
+start with 1;
+
+
+create table member_type(
+   member_type_id number primary key
+   , type varchar(20)
+);
+create sequence seq_member_type
+increment by 1
+start with 1;
+
+insert into member_type(member_type_id,type) values(seq_member_type.nextval,'admin');
+insert into member_type(member_type_id,type) values(seq_member_type.nextval,'member');
+
+create table admin(
+   admin_id number primary key
+    , member_type_id number
+    , emp_id varchar(40)
+    , user_id varchar(40)
+    , password varchar(100)
+    , regdate date default sysdate
+    , constraint fk_member_typeadmin foreign key(member_type_id) references member_type(member_type_id)
+);
+create sequence seq_admin
+increment by 1
+start with 1;
+
+insert into admin(admin_id,member_type_id,user_id,password) values(seq_admin.nextval,1,'admin',1234);
+
+--------------------------------------------------------------
+주문 관련 쿼리
+
+(배송상태)
+create table order_state(
+  order_state_id number primary key,
+  state varchar(20)
+);
+
+(배송방법)
+create table paymethod(
+  paymethod_id number primary key,
+  method varchar(20)
+);
+
+
+create table order_summary(
+  order_summary_id number primary key,
+  member_id number,
+  total_price number default 0,
+  total_pay number default 0,
+  orderdate date default sysdate,
+  order_state_id number,
+  paymethod_id number,
+  constraint fk_order_state_order_summary foreign key(order_state_id) references order_state(order_state_id),
+  constraint fk_member_order_summary foreign key(member_id) references member(member_id),
+  constraint fk_paymethod_order_summary foreign key(paymethod_id) references paymethod(paymethod_id)
+);
+
+(배송정보)
+create table receiver(
+  receiver_id number primary key,
+  order_summary_id number,
+  receiver_name varchar(20),
+  receiver_addr varchar(100),
+  receiver_phone varchar(13),
+  constraint fk_order_summary_receiver foreign key(order_summary_id) references order_summary(order_summary_id)
+);
+
+(주문상세)
+create table order_detail(
+  order_detail_id number primary key,
+  order_summary_id number,
+  product_id number,
+  price number default 0,
+  quantity number default 0,
+  color varchar(10),
+  constraint fk_order_summary_order_detail foreign key(order_summary_id) references order_summary(order_summary_id),
+  constraint fk_product_order_detail foreign key(product_id) references product(product_id)
+);
+
+
+---시퀀스
+create sequence seq_order_state
+increment by 1
+start with 1;
+
+create sequence seq_paymethod
+increment by 1
+start with 1;
+
+create sequence seq_order_summary
+increment by 1
+start with 1;
+
+create sequence seq_receiver
+increment by 1
+start with 1;
+
+create sequence seq_order_detail
+increment by 1
+start with 1;
+
+
+-------------------------------------------------
+기본적으로 넣어놀거 insert해놓자
+
+(order_state)
+insert into order_state(order_state_id,state) values(seq_order_state.nextval,'주문완료');
+insert into order_state(order_state_id,state) values(seq_order_state.nextval,'상품준비중');
+insert into order_state(order_state_id,state) values(seq_order_state.nextval,'배송출발');
+insert into order_state(order_state_id,state) values(seq_order_state.nextval,'배송완료');
+
+
+(paymethod)
+insert into paymethod(paymethod_id,method) values(seq_paymethod.nextval,'card');
+insert into paymethod(paymethod_id,method) values(seq_paymethod.nextval,'핸드폰');
+insert into paymethod(paymethod_id,method) values(seq_paymethod.nextval,'온라인입금');
+insert into paymethod(paymethod_id,method) values(seq_paymethod.nextval,'가상계좌');
+
+
+
+		
